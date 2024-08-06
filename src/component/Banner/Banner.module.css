@@ -1,0 +1,90 @@
+.banner {
+  height: 65vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  font-family: "Roboto", sans-serif;
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(70%);
+  z-index: -1;
+}
+
+.content {
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.title {
+  color: #ffffff;
+  font-size: 50px;
+  font-weight: 700;
+  margin: 20px 0;
+}
+
+.button {
+  width: 100px;
+  height: 40px;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 14.06px;
+  color: white;
+  background-color: #9b51e0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button:hover {
+  background-color: #a000a0;
+}
+@media (max-width: 768px) {
+    .title {
+      font-size: 30px;  
+      margin: 10px 0;
+    }
+  
+    .button {
+      width: 80px;
+      height: 30px;
+      padding: 8px;
+      font-size: 10px;  
+    }
+  
+    .banner {
+      height: 50vh;  
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .title {
+      font-size: 24px; 
+    }
+  
+    .button {
+      width: 60px;
+      height: 35px;
+      font-size: 9px;
+    }
+  
+    .banner {
+      height: 40vh;  
+    }
+  }
