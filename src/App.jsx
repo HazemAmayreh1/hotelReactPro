@@ -7,6 +7,8 @@ import Contacts from "./component/Contacts/Contacts";
 import Notfound from "./component/Ntfound/Notfound";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
+import Login from "./component/Login/Login";
+import Register from "./component/Register/Register";
 
 const router = createBrowserRouter([
   {
@@ -30,9 +32,18 @@ const router = createBrowserRouter([
         element: <Contacts />
       },
       {
+        path: "reg",
+        element: <Register/>
+      },
+      {
+        path: "login",
+        element: <Login/>
+      },
+      {
         path: "*",
         element: <Notfound />
       }
+      
     ],
   },
 ]);
