@@ -1,4 +1,4 @@
-import notfound from '../../img/notfound.jpg'
+import notfound from '../../img/404.png'
 function Notfound() {
   return (
     <div>

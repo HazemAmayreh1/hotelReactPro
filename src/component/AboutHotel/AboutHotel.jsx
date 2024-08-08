@@ -1,5 +1,5 @@
 import styles from "./AboutHotel.module.css";
-import HotelImage from "../../img/bedddd33 1.png";
+import HotelImage from "../../img/Hotel-Sw.jpg";
 
 function AboutHotel() {
   return (

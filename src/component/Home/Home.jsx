@@ -1,7 +1,7 @@
 import Banner from "../Banner/Banner";
 import backgroundImage from "../../img/Home-background-image.png";
+import backgroundSw from "../../img/wedding-venue.jpg";
 import AboutHotel from "../AboutHotel/AboutHotel";
-import Weddings from "../Weddings/Weddings";
 import Swiper from "../Swiper/Swiper";
 
 function Home() {
@@ -20,7 +20,10 @@ function Home() {
       <div className="px-5 py-24 ">
         <AboutHotel />
       </div>
-      <Weddings />
+      <Banner
+        imageUrl={backgroundSw}
+        title="event & weddings"
+      />
       <div className="px-10 py-24 ">
         <Swiper />
       </div>

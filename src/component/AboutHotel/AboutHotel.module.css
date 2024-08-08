@@ -10,47 +10,56 @@
 }
 
 .hotelInfo {
-  max-width: 40%;
   flex: 1;
+  max-width: 40%;
   min-width: 300px;
 }
 
-.hotelInfo h1  {
-  color: #4f4f4f;
-  font-size: 25px;
+.hotelInfo h1 {
+  color: #333;  
+  font-size: 24px;
   font-weight: 800;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 .hotelInfo h1 span {
-  color: #5d5d5dd4;
-  font-size: 25px;
-  font-weight: 800;
-
+  color: #555;  
 }
 
 .hotelInfo p {
-  font-weight: 500;
-  font-size: 20px;
-  color: #4f4f4f;
+  font-weight: 300;
+  font-size: 16px;
+  color: #444; 
   text-align: justify;
-  margin: 40px 0px;
+  line-height: 1.6; 
+  margin: 20px 0;
 }
 
 .hotelInfo button {
   padding: 10px 20px;
-  background-color: #636262;
+  background-color: rgb(55 65 81); 
   color: white;
-  font-size: 18px;
+  font-size: 16px;
+  border-radius: 5px; 
   border: none;
   cursor: pointer;
-  margin: 20px 0px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hotelInfo button:hover {
+  background-color: rgb(31 41 55);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); 
 }
 
 .hotelImage img {
-  width: 600px;
-  height: 500px;
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  filter: brightness(0.9) contrast(1.1) blur(1px); 
+  border-radius: 8px; 
 }
+
 
 @media (min-width: 1600px) and (max-width: 2700px) {
   .container {
@@ -59,32 +68,29 @@
   }
 
   .hotelInfo h1 {
-    font-size: 35px;
+    font-size: 32px;
   }
+
   .hotelInfo p {
-    font-size: 30px;
+    font-size: 18px;
   }
 }
 
 @media (max-width: 1200px) {
   .hotelImage img {
-    width: 450px;
+    max-width: 450px;
     height: 550px;
   }
 }
 
 @media (max-width: 768px) {
-  .hotelImage img {
-    width: 450px;
-    height: auto;
-  }
   .hotelInfo {
     max-width: 100%;
     min-width: 100%;
   }
 
   .hotelInfo h1 {
-    font-size: 18px;
+    font-size: 20px;
   }
 
   .hotelInfo p {
@@ -93,13 +99,13 @@
 
   .hotelInfo button {
     font-size: 14px;
-    padding: 7px 14px;
+    padding: 10px 18px;
   }
 }
 
 @media (max-width: 430px) {
   .hotelInfo h1 {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .hotelInfo p {
@@ -108,31 +114,21 @@
 
   .hotelInfo button {
     font-size: 12px;
-    padding: 5px 10px;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  .hotelInfo h1 {
+    font-size: 16px;
   }
 
-  .hotelImage img {
-    width: 100%;
-    height: auto;
+  .hotelInfo p {
+    font-size: 10px;
   }
 
-  @media (max-width: 380px) {
-    .hotelInfo h1 {
-      font-size: 14px;
-    }
-
-    .hotelInfo p {
-      font-size: 10px;
-    }
-
-    .hotelInfo button {
-      font-size: 10px;
-      padding: 5px 10px;
-    }
-
-    .hotelImage img {
-      width: 100%;
-      height: auto;
-    }
+  .hotelInfo button {
+    font-size: 10px;
+    padding: 6px 12px;
   }
 }

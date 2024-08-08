@@ -45,14 +45,14 @@
   font-size: 12px;
   line-height: 14.06px;
   color: white;
-  background-color: #6d6c6c;
+  background-color: rgb(75 85 99);
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .button:hover {
-  background-color: #3a3939;
+  background-color: rgb(55 65 81);
 }
 @media (max-width: 768px) {
     .title {

@@ -16,6 +16,8 @@
 .swiperSlide img {
   width: 300px;
   height: 300px;
+  filter: brightness(75%) contrast(110%) blur(0.5px);
+  object-fit: cover;
 }
 
 @media (min-width: 1600px) and (max-width: 2700px) {
