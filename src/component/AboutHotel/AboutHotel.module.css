@@ -1,0 +1,135 @@
+.container {
+  font-family: "Roboto", sans-serif;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 1600px;
+  position: relative;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.hotelInfo {
+  max-width: 40%;
+  flex: 1;
+  min-width: 300px;
+}
+
+.hotelInfo h1 {
+  color: #4f4f4f;
+  font-size: 25px;
+  font-weight: 800;
+  margin-bottom: 25px;
+}
+
+.hotelInfo h1 span {
+  color: #5d5d5dd4;
+}
+
+.hotelInfo p {
+  font-weight: 500;
+  font-size: 20px;
+  color: #4f4f4f;
+  text-align: justify;
+  margin: 40px 0px;
+}
+
+.hotelInfo button {
+  padding: 10px 20px;
+  background-color: #636262;
+  color: white;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  margin: 20px 0px;
+}
+
+.hotelImage img {
+  width: 600px;
+  height: 500px;
+}
+
+@media (min-width: 1600px) and (max-width: 2700px) {
+  .container {
+    text-align: center;
+    max-width: 2500px;
+  }
+
+  .hotelInfo h1 {
+    font-size: 35px;
+  }
+  .hotelInfo p {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .hotelImage img {
+    width: 450px;
+    height: 550px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hotelImage img {
+    width: 450px;
+    height: auto;
+  }
+  .hotelInfo {
+    max-width: 100%;
+    min-width: 100%;
+  }
+
+  .hotelInfo h1 {
+    font-size: 18px;
+  }
+
+  .hotelInfo p {
+    font-size: 14px;
+  }
+
+  .hotelInfo button {
+    font-size: 14px;
+    padding: 7px 14px;
+  }
+}
+
+@media (max-width: 430px) {
+  .hotelInfo h1 {
+    font-size: 16px;
+  }
+
+  .hotelInfo p {
+    font-size: 12px;
+  }
+
+  .hotelInfo button {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  .hotelImage img {
+    width: 100%;
+    height: auto;
+  }
+
+  @media (max-width: 380px) {
+    .hotelInfo h1 {
+      font-size: 14px;
+    }
+
+    .hotelInfo p {
+      font-size: 10px;
+    }
+
+    .hotelInfo button {
+      font-size: 10px;
+      padding: 5px 10px;
+    }
+
+    .hotelImage img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}
