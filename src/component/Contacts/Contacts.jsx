@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Banner from "../Banner/Banner";
 import backgroundImage from "../../img/contactBanner.jpg";
-import phoneIcon from "../../img/phone-icon.png";
-import emailIcon from "../../img/email-icon.png";
-import locationIcon from "../../img/location-icon.png";
+import phoneIcon from "../../img/phoneIconGray.png";
+import emailIcon from "../../img/email-iconGray.png";
+import locationIcon from "../../img/location-iconGray.png";
 import styles from './Contacts.module.css';
 import { toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

@@ -17,7 +17,7 @@
   bottom: 0;
   background-size: cover;
   background-position: center;
-  filter: brightness(70%);
+  filter: brightness(80%) contrast(90%) saturate(110%) blur(2px);
   z-index: -1;
 }
 
@@ -45,7 +45,7 @@
   font-size: 12px;
   line-height: 14.06px;
   color: white;
-  background-color: #9b51e0;
+  background-color: #6d6c6c;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -53,7 +53,7 @@
 }
 
 .button:hover {
-  background-color: #a000a0;
+  background-color: #3a3939;
 }
 @media (max-width: 768px) {
     .title {
