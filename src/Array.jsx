@@ -43,5 +43,14 @@ export const room_info = [
         "capacity": 4,
         "price_per_night": 200000,
         "peopl": 3
+    },
+    {
+        "id": 6,
+        "photo_url": '/src/img/standard double room.png',
+        "bathrooms": 2,
+        "beds": 2,
+        "capacity": 4,
+        "price_per_night": 200000,
+        "peopl": 3
     }
 ]
