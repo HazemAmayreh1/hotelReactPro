@@ -15,7 +15,7 @@
   min-width: 300px;
 }
 
-.hotelInfo h1 {
+.hotelInfo h1  {
   color: #4f4f4f;
   font-size: 25px;
   font-weight: 800;
@@ -24,6 +24,9 @@
 
 .hotelInfo h1 span {
   color: #5d5d5dd4;
+  font-size: 25px;
+  font-weight: 800;
+
 }
 
 .hotelInfo p {

@@ -1,4 +1,3 @@
-import React from "react";
 import styles from "./AboutHotel.module.css";
 import HotelImage from "../../img/bedddd33 1.png";
 
