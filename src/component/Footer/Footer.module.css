@@ -30,6 +30,7 @@
   
   .footer a:hover {
     text-decoration: none;
-    color: white;
-  }
-  
+    color: black; 
+    background-color: #f3f3f3; 
+    transition: color 0.3s ease, background-color 0.3s ease; 
+}

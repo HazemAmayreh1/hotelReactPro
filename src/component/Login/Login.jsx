@@ -6,7 +6,7 @@ function Login() {
     <section className="relative bg-gray-50 dark:bg-gray-900 overflow-hidden">
       <div className="absolute inset-0" style={{ height: '100%' }}> 
         <img 
-          src="https://images7.alphacoders.com/362/362619.jpg" 
+          src="https://wallpaperaccess.com/full/2690784.jpg" 
           alt="Background" 
           className="w-full h-full object-cover"
           style={{ filter: 'brightness(40%) blur(2px)' }}
