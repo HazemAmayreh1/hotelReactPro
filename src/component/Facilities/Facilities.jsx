@@ -13,7 +13,7 @@ function Facilities() {
         title="FACILITIES"
       />
       <div className="flex justify-center items-center">
-        <div className="px-10 py-24 grid grid-cols-1 sm:grid-cols-3 gap-10">
+        <div className="px-10 py-24 grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 gap-10">
           {room_info.map(room => (
             <div key={room.id} className="flex flex-col gap-y-4 h-fit p-4 border border-gray-200 rounded-lg shadow-lg">
               <div className="flex flex-col text-center gap-y-4">

@@ -22,7 +22,7 @@ function Room() {
     <>
       <Banner imageUrl={bed} title="OUR ROOMS AND RATE" />
       <div className="flex justify-center items-center">
-        <div className="px-10 py-24 grid grid-cols-1 sm:grid-cols-3 gap-10">
+        <div className="px-10 py-24 grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 gap-10">
           {room_info.map((room) => (
             <div
               key={room.id}
