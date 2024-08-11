@@ -9,6 +9,9 @@ import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css'
 import Login from "./component/Login/Login";
 import Register from "./component/Register/Register";
+import CartPage from "./component/Cart/CartPage";
+import { CartProvider } from "../context/cartContext";
+import ProfileOrdersPage from "./component/ProfileOrdersPage/ProfileOrdersPage";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +43,14 @@ const router = createBrowserRouter([
         element: <Login/>
       },
       {
+        path: "/cart",
+        element: <CartPage/>
+      },
+      {
+        path: "/order",
+        element: <ProfileOrdersPage/>
+      },
+      {
         path: "*",
         element: <Notfound />
       }
@@ -50,7 +61,9 @@ const router = createBrowserRouter([
 
 export default function App() {
   return <>
-    <RouterProvider router={router} />
-    <ToastContainer />
+   <CartProvider>
+      <RouterProvider router={router} />
+      <ToastContainer />
+    </CartProvider>
   </>
 }

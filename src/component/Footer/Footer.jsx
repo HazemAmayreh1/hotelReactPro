@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function Footer() {
   return (
-    <footer className={`bg-gray-100 text-gray-600 py-8 ${style.footer}`} style={{ borderTop: '1px solid #eaeaea' }}>
+    <footer className={`bg-gray-50 text-gray-600 py-8 ${style.footer}`} style={{ borderTop: '1px solid #eaeaea' }}>
   <div className="container mx-auto px-4">
     <div className="flex flex-col md:flex-row justify-between">
       <div className="mb-6 md:mb-0">

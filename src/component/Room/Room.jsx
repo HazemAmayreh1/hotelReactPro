@@ -1,12 +1,19 @@
+import React, { useContext } from "react";
 import Banner from "../Banner/Banner";
 import bed from "../../img/bed.png";
 import { room_info } from "../../Array";
 import { Bounce, toast } from "react-toastify";
 import styles from "./Room.module.css";
+import { CartContext } from "../../../context/cartContext";
+
+
 
 function Room() {
-  const handleChange = () => {
-    toast.success("Booked", {
+  const { addToCart } = useContext(CartContext);
+
+  const handleChange = (room) => {
+    addToCart(room);
+    toast.success("Added to Cart", {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -18,6 +25,7 @@ function Room() {
       transition: Bounce,
     });
   };
+
   return (
     <>
       <Banner imageUrl={bed} title="OUR ROOMS AND RATE" />
@@ -54,7 +62,7 @@ function Room() {
                 <button
                   className="bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:bg-gray-700 font-bold"
                   style={{ fontWeight: 700 }}
-                  onClick={handleChange}
+                  onClick={() => handleChange(room)}
                 >
                   Book Now
                 </button>
@@ -62,6 +70,7 @@ function Room() {
             </div>
           ))}
         </div>
+        
       </div>
     </>
   );
