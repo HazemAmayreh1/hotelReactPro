@@ -102,6 +102,29 @@
     display: block;
 }
 
+.logoutbtn {
+    background-color: #f44336;  
+    color: white;              
+    border: none;             
+    padding: 10px 20px;         
+    width: 100%;
+    font-size: 16px;           
+    cursor: pointer;           
+    border-radius: 5px;        
+    transition: background-color 0.3s ease; 
+  }
+  
+  .logoutbtn:hover {
+    background-color: #d32f2f; 
+  }
+  
+  .logoutbtn:active {
+    background-color: #c62828;  
+  }
+  
+  .logoutbtn:focus {
+    outline: none;             
+  }
 .dropdownContent a:hover {
     background-color: rgb(55 65 81);
     color: #fff;
@@ -122,7 +145,7 @@
     }
 
     .dropdown {
-        order: 1; /* Ensures dropdown stays in sequence with logo and hamburger */
+        order: 1; 
     }
 }
 
@@ -138,7 +161,7 @@
     }
 
     .logo {
-        order: 0; /* Keeps logo in sequence */
+        order: 0; 
         margin-bottom: 0;
     }
 
@@ -159,12 +182,12 @@
 
     .hamburger {
         display: block;
-        order: 2; /* Keeps hamburger in sequence */
+        order: 2;
     }
 
     .dropdown {
-        order: 1; /* Keeps dropdown in sequence */
-        margin-right: 10px; /* Adjust space between profile icon and other elements */
+        order: 1; 
+        margin-right: 10px;
     }
 }
 

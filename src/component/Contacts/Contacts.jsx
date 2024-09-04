@@ -22,37 +22,42 @@ function Contacts() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      console.log("Sending data", formData);
-     //api code 
-      
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-      toast.success("Feedback submitted!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "light",
-        transition: Bounce,
-      });
+  
+    const apiUrl = `${import.meta.env.VITE_API_URL}/feedbackAPI/insertFeedback/comment/GuestID`;
+    try {
+      const response = await axios.get(apiUrl);
+  
+      if (response.status === 200) {
+        console.log("API call successful. Status 200 OK.");  
+        const responseData = response.data;
+        console.log("Response data:", responseData);
+  
+        if (responseData.guestEmail) {
+          localStorage.setItem("guestEmail", responseData.guestEmail); 
+          localStorage.setItem("token", responseData.token);
+          localStorage.setItem('username', responseData.guestUserName);
+          setUserName(responseData.guestUserName);
+          toast.success(`Login successful! Welcome, ${responseData.guestEmail}`);
+          setTimeout(() => {
+            navigate("/");
+            window.location.reload();
+          }, 1500); 
+         
+        } else {
+          toast.error("Login failed: Invalid credentials.");
+        }
+      } else {
+        console.log(`Login failed with status: ${response.statusText}`); 
+        toast.error(`Login failed: ${response.statusText}`);
+      }
     } catch (error) {
-      toast.error("Failed to submit feedback. Please try again later.", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "light",
-        transition: Bounce,
-      });
+      console.error("Network Error:", error); 
+      toast.error(`Network Error: ${error.message}`);
     }
   };
-
   return (
     <>
      <Banner imageUrl={backgroundImage} title="Contacts Us" />
@@ -89,6 +94,9 @@ function Contacts() {
           <button type="submit" className={styles.button}>SEND MESSAGE</button>
         </form>
       </div>
+
+
+
       <div className={styles.contactDetails}>
           <div className={styles.contactItem}>
             <img src={phoneIcon} alt="Phone" className={styles.icon} />

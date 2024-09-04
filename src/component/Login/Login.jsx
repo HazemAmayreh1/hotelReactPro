@@ -1,45 +1,44 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Link, useNavigate } from "react-router-dom";
-import styles from "./Login.module.css";
+
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState(""); 
+  const [userName, setUserName] = useState(""); 
   const navigate = useNavigate();
+  
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    if (storedToken) {
-      console.log("Token found:", storedToken); 
-      navigate("/"); 
-    }
-  }, [navigate]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     const encodedEmail = encodeURIComponent(email);
     const encodedPassword = encodeURIComponent(password);
-
-    const apiUrl = `http://hotelmanagement.somee.com/api/GuestAPI/login/${encodedEmail}/${encodedPassword}`;
-
+  
+    const apiUrl = `${import.meta.env.VITE_API_URL}/GuestAPI/login/${encodedEmail}/${encodedPassword}`;
     try {
       const response = await axios.get(apiUrl);
-
-      if (response.status == 200) {
+  
+      if (response.status === 200) {
         console.log("API call successful. Status 200 OK.");  
         const responseData = response.data;
-
-        if (responseData.success || responseData.token) {
-          console.log("Login successful. Token:", responseData.token);  
-          setToken(responseData.token); 
+        console.log("Response data:", responseData);
+  
+        if (responseData.guestEmail) {
+          localStorage.setItem("guestEmail", responseData.guestEmail); 
           localStorage.setItem("token", responseData.token);
-          toast.success(`Login successful! Token: ${responseData.token}`);
-          navigate("/");  
+          localStorage.setItem('username', responseData.guestUserName);
+          setUserName(responseData.guestUserName);
+          toast.success(`Login successful! Welcome, ${responseData.guestEmail}`);
+          setTimeout(() => {
+            navigate("/");
+            window.location.reload();
+          }, 1500); 
+         
         } else {
           toast.error("Login failed: Invalid credentials.");
         }
@@ -53,6 +52,15 @@ function Login() {
     }
   };
 
+  useEffect(() => {
+    const storedToken = localStorage.getItem("guestEmail");
+    console.log(" founsdadsdad"); 
+    if (storedToken) {
+      console.log("Token found:", storedToken); 
+    }
+  }, [userName]);
+
+  
   return (
     <section className="relative bg-gray-50 dark:bg-gray-900 overflow-hidden">
       <ToastContainer />

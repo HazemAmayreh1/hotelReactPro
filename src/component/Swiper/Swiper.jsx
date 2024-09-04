@@ -9,6 +9,18 @@ import superImg from "../../img/superior room 1.png";
 
 const imageUrls = [deluxeImg, familyImg, seaImg, superImg];
 
+// Custom next arrow
+const NextArrow = (props) => {
+  const { onClick } = props;
+  return <button className={styles.arrow} onClick={onClick}>→</button>;
+};
+
+// Custom previous arrow
+const PrevArrow = (props) => {
+  const { onClick } = props;
+  return <button className={styles.arrow} onClick={onClick}>←</button>;
+};
+
 const Swiper = () => {
   const settings = {
     dots: true,
@@ -18,8 +30,8 @@ const Swiper = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 1000,
-    nextArrow: <button>→</button>,
-    prevArrow: <button>←</button>,
+    nextArrow: <NextArrow />, // Use custom next arrow
+    prevArrow: <PrevArrow />, // Use custom previous arrow
   };
 
   return (
