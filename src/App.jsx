@@ -6,12 +6,15 @@ import Facilities from "./component/Facilities/Facilities";
 import Contacts from "./component/Contacts/Contacts";
 import Notfound from "./component/Ntfound/Notfound";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css'
+import 'react-toastify/dist/ReactToastify.css';
 import Login from "./component/Login/Login";
 import Register from "./component/Register/Register";
 import CartPage from "./component/Cart/CartPage";
 import { CartProvider } from "../context/cartContext";
 import ProfileOrdersPage from "./component/ProfileOrdersPage/ProfileOrdersPage";
+import ProtectedRoutes from "./component/ProtectedRoutes/ProtectedRoutes";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 const router = createBrowserRouter([
   {
@@ -31,39 +34,43 @@ const router = createBrowserRouter([
         element: <Facilities />
       },
       {
-        path: "contacts",
-        element: <Contacts />
-      },
-      {
         path: "reg",
-        element: <Register/>
+        element: <Register />
       },
       {
         path: "login",
-        element: <Login/>
-      },
-      {
-        path: "/cart",
-        element: <CartPage/>
-      },
-      {
-        path: "/order",
-        element: <ProfileOrdersPage/>
+        element: <Login />
       },
       {
         path: "*",
         element: <Notfound />
+      },
+      {
+        element: <ProtectedRoutes />, 
+        children: [
+          {
+            path: "/cart",
+            element: <CartPage />
+          },
+          {
+            path: "contacts",
+            element: <Contacts />
+          },
+          {
+            path: "/order",
+            element: <ProfileOrdersPage />
+          }
+        ]
       }
-      
     ],
   },
 ]);
 
 export default function App() {
-  return <>
-   <CartProvider>
+  return (
+    <CartProvider>
       <RouterProvider router={router} />
       <ToastContainer />
     </CartProvider>
-  </>
+  );
 }

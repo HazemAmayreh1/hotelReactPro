@@ -1,17 +1,18 @@
-import { useContext,useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Banner from "../Banner/Banner";
 import bed from "../../img/bed.png";
 import { Bounce, toast } from "react-toastify";
 import styles from "./Room.module.css";
 import { CartContext } from "../../../context/cartContext";
+import { useNavigate } from "react-router-dom";  
 import axios from "axios"; 
-
-
+import Loader from "../Loader/Loader"; 
 
 function Room() {
   const { addToCart } = useContext(CartContext);
   const [rooms, setRooms] = useState([]); 
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);  
+  const navigate = useNavigate();  
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -28,27 +29,61 @@ function Room() {
 
     fetchRooms();
   }, []);
-  const handleChange = (room) => {
-    addToCart(room);
-    toast.success("Added to Cart", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
-    });
+
+  const isAuthenticated = () => {
+    const guestEmail = localStorage.getItem("guestEmail");  
+    return guestEmail;
   };
+const handleBookNow = async (room) => {
+  if (isAuthenticated()) {
+    setLoading(true);  
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000)); 
+      
+      addToCart(room);
+      
+      const encodedRoomName = encodeURIComponent(room.roomName);
+      const encodedRoomNumber = encodeURIComponent(room.roomNumber);
+      const encodedRoomType = encodeURIComponent(room.type);
+      const encodedRoomImage = encodeURIComponent(room.roomImage);
+      const encodedPrice = encodeURIComponent(room.price);
+
+      const updateRoomStatusUrl = `${import.meta.env.VITE_API_URL}/RoomAPI/UpdateRoom/${encodedRoomName}/${encodedRoomNumber}/${encodedRoomType}/${encodedPrice}/true/${encodedRoomImage}`;
+      
+      console.log('Sending request to update room status:', updateRoomStatusUrl);
+
+      const response = await axios.get(updateRoomStatusUrl);
+      
+      if (response.status === 200) {
+        console.log("Room status updated successfully.");
+        toast.success("Room booked and status updated successfully.");
+      } else {
+        console.log("Failed to update room status. Response:", response.data);
+        toast.error("Failed to update room status.");
+      }
+
+    } catch (error) {
+      console.error("Error booking room and updating status:", error);
+      toast.error("Failed to book the room and update status.");
+    } finally {
+      setLoading(false); 
+    }
+  } else {
+    toast.error("You need to be logged in to book a room.");
+    navigate("/reg");
+  }
+};
+
+  
+
+
   if (loading) {
-    return <div>Loading...</div>; 
+    return <Loader />;
   }
 
   return (
     <>
-       <Banner imageUrl={bed} title="OUR ROOMS AND RATE" />
+      <Banner imageUrl={bed} title="OUR ROOMS AND RATE" />
       <div className="flex justify-center items-center">
         <div className="px-10 py-24 grid grid-cols-1 lg:grid-cols-3 sm:grid-cols-2 gap-10">
           {rooms.map((room) => (
@@ -82,7 +117,7 @@ function Room() {
                 <button
                   className="bg-gray-600 text-white px-4 py-2 rounded-lg transition duration-300 ease-in-out hover:bg-gray-700 font-bold"
                   style={{ fontWeight: 700 }}
-                  onClick={() => handleChange(room)}
+                  onClick={() => handleBookNow(room)}  
                 >
                   Book Now
                 </button>

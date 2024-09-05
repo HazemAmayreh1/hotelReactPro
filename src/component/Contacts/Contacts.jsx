@@ -1,18 +1,20 @@
 import { useState } from 'react';
+import axios from 'axios';
 import Banner from "../Banner/Banner";
 import backgroundImage from "../../img/contactBanner.jpg";
 import phoneIcon from "../../img/phoneIconGray.png";
 import emailIcon from "../../img/email-iconGray.png";
 import locationIcon from "../../img/location-iconGray.png";
+import Loader from "../Loader/Loader";  // Import the Loader component
 import styles from './Contacts.module.css';
 import { toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
 function Contacts() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
+    comment: '' 
   });
+  const [loading, setLoading] = useState(false); // Add loading state
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,93 +26,82 @@ function Contacts() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);  // Start loader
 
+    const GuestId = localStorage.getItem('guestId'); 
+
+    if (!GuestId) {
+      setLoading(false); // Stop loader if GuestId is missing
+      toast.error('Guest ID not found. Please log in.');
+      return;
+    }
   
-    const apiUrl = `${import.meta.env.VITE_API_URL}/feedbackAPI/insertFeedback/comment/GuestID`;
+    const encodedComment = encodeURIComponent(formData.comment);
+  
+    const apiUrl = `${import.meta.env.VITE_API_URL}/feedbackAPI/insertFeedback/comment/${GuestId}?comment=${encodedComment}`;
+  
     try {
       const response = await axios.get(apiUrl);
   
       if (response.status === 200) {
-        console.log("API call successful. Status 200 OK.");  
-        const responseData = response.data;
-        console.log("Response data:", responseData);
-  
-        if (responseData.guestEmail) {
-          localStorage.setItem("guestEmail", responseData.guestEmail); 
-          localStorage.setItem("token", responseData.token);
-          localStorage.setItem('username', responseData.guestUserName);
-          setUserName(responseData.guestUserName);
-          toast.success(`Login successful! Welcome, ${responseData.guestEmail}`);
-          setTimeout(() => {
-            navigate("/");
-            window.location.reload();
-          }, 1500); 
-         
-        } else {
-          toast.error("Login failed: Invalid credentials.");
-        }
+        toast.success("Message sent successfully! Thank you for your feedback.", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+        setFormData({ comment: '' });
       } else {
-        console.log(`Login failed with status: ${response.statusText}`); 
-        toast.error(`Login failed: ${response.statusText}`);
+        toast.error(`Failed to send message: ${response.statusText}`);
       }
     } catch (error) {
-      console.error("Network Error:", error); 
+      console.error("Network Error:", error);
       toast.error(`Network Error: ${error.message}`);
+    } finally {
+      setLoading(false);  // Stop loader after the request completes
     }
   };
+
   return (
     <>
-     <Banner imageUrl={backgroundImage} title="Contacts Us" />
+      {loading && <Loader />} {/* Display loader when loading is true */}
+      <Banner imageUrl={backgroundImage} title="Contact Us" />
       <div className={styles.container}>
-        <h2 className={styles.header}>We’ll love to hear your feedback. Kindly send us a mail</h2>
+        <h2 className={styles.header}>We’d love to hear your feedback. Kindly send us a message.</h2>
        
         <form className={styles.form} onSubmit={handleSubmit}>
           <input
             type="text"
-            name="name"
-            placeholder="Your name"
+            name="comment"
+            placeholder="Your comment"
             required
             onChange={handleChange}
-            value={formData.name}
+            value={formData.comment}
             className={styles.input}
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Your email"
-            required
-            onChange={handleChange}
-            value={formData.email}
-            className={styles.input}
-          />
-          <textarea
-            name="message"
-            placeholder="Type your message"
-            required
-            onChange={handleChange}
-            value={formData.message}
-            className={styles.textarea}
           />
           <button type="submit" className={styles.button}>SEND MESSAGE</button>
         </form>
       </div>
 
-
-
       <div className={styles.contactDetails}>
-          <div className={styles.contactItem}>
-            <img src={phoneIcon} alt="Phone" className={styles.icon} />
-            <span>+2349061504648</span>
-          </div>
-          <div className={styles.contactItem}>
-            <img src={emailIcon} alt="Email" className={styles.icon} />
-            <span>oluwadamilolafaj@gmail.com</span>
-          </div>
-          <div className={styles.contactItem}>
-            <img src={locationIcon} alt="Location" className={styles.icon} />
-            <span>Road 12, Peace Avenue, Ado, Ekiti</span>
-          </div>
+        <div className={styles.contactItem}>
+          <img src={phoneIcon} alt="Phone" className={styles.icon} />
+          <span>+2349061504648</span>
         </div>
+        <div className={styles.contactItem}>
+          <img src={emailIcon} alt="Email" className={styles.icon} />
+          <span>oluwadamilolafaj@gmail.com</span>
+        </div>
+        <div className={styles.contactItem}>
+          <img src={locationIcon} alt="Location" className={styles.icon} />
+          <span>Road 12, Peace Avenue, Ado, Ekiti</span>
+        </div>
+      </div>
     </>
   );
 }

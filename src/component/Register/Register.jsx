@@ -3,42 +3,39 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
-
+import Loader from '../Loader/Loader';
 
 function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true); 
 
     const encodedEmail = encodeURIComponent(email);
     const encodedPassword = encodeURIComponent(password);
 
+    const apiUrl = `${import.meta.env.VITE_API_URL}/GuestAPI/register/${username}/${encodedEmail}/${encodedPassword}`;
     
-    const apiUrl = `http://HotelManagement.somee.com/api/GuestAPI/register/${username}/${encodedEmail}/${encodedPassword}`;
     try {
       const response = await axios.get(apiUrl);
 
       if (response.status === 200) {
-        toast.success("Registration successful!", {
-         
-        });
+        setLoading(false); 
+        toast.success("Registration successful!");
       } else {
-        toast.error(`Registration failed: ${response.statusText}`, {
-          
-        });
+        setLoading(false); 
+        toast.error(`Registration failed: ${response.statusText}`);
       }
     } catch (error) {
+      setLoading(false); 
       if (error.response && error.response.status === 401) {
-        toast.error("Unauthorized: Please check your credentials.", {
-          
-        });
+        toast.error("Unauthorized: Please check your credentials.");
       } else {
-        toast.success("Registration successful!", {
-          
-        });
+        toast.error("An error occurred during registration.");
       }
       console.error("Error occurred:", error);
     }
@@ -47,6 +44,8 @@ function Register() {
   return (
     <section className="relative overflow-hidden bg-gray-50 dark:bg-gray-900">
       <ToastContainer />
+      {loading && <Loader />} 
+
       <div className="absolute inset-0" style={{ height: "100%" }}>
         <img
           src="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?cs=srgb&dl=pexels-pixabay-258154.jpg&fm=jpg"
@@ -55,6 +54,7 @@ function Register() {
           style={{ filter: "brightness(50%) blur(2px)" }}
         />
       </div>
+
       <div
         className="relative px-4 sm:px-6 py-4 mx-auto max-w-lg w-full"
         style={{ paddingTop: "2vh" }}
@@ -67,6 +67,7 @@ function Register() {
             <h1 className="text-lg sm:text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
               Create an account
             </h1>
+
             <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label
@@ -86,6 +87,7 @@ function Register() {
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
+
               <div>
                 <label
                   htmlFor="email"
@@ -104,6 +106,7 @@ function Register() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
+
               <div>
                 <label
                   htmlFor="password"
@@ -122,12 +125,14 @@ function Register() {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
+
               <button
                 type="submit"
                 className="w-full font-bold bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
               >
                 Create an account
               </button>
+
               <p>
                 Already have an account?{" "}
                 <Link

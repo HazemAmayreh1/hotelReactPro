@@ -4,16 +4,31 @@ import { toast } from 'react-toastify';
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState(() => {
-    const storedCart = localStorage.getItem('cart');
-    return storedCart ? JSON.parse(storedCart) : [];
-  });
+  const [cart, setCart] = useState([]);
+  const [guestEmail, setGuestEmail] = useState(null);
+
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
+    const email = localStorage.getItem('guestEmail');
+    setGuestEmail(email);
+
+    if (email) {
+      const storedCart = localStorage.getItem(`cart_${email}`);
+      if (storedCart) {
+        setCart(JSON.parse(storedCart));
+      } else {
+        setCart([]); 
+      }
+    }
+  }, [guestEmail]);
+
+  useEffect(() => {
+    if (guestEmail) {
+      localStorage.setItem(`cart_${guestEmail}`, JSON.stringify(cart));
+    }
+  }, [cart, guestEmail]);
 
   const isAuthenticated = () => {
-    const token = localStorage.getItem('guestEmail'); 
+    const token = localStorage.getItem('guestEmail');
     return token ? true : false;
   };
 
@@ -23,7 +38,20 @@ export const CartProvider = ({ children }) => {
       return;
     }
 
-    setCart((prevCart) => [...prevCart, room]);
+  
+    if (room.status === true) {
+      toast.error('This room is already booked and cannot be added to the cart');
+      return;
+    }
+
+    const roomExists = cart.some(item => item.roomId === room.roomId);
+
+    if (roomExists) {
+      toast.error('This room is already in the cart');
+    } else {
+      setCart((prevCart) => [...prevCart, room]);
+      toast.success('Room added to cart');
+    }
   };
 
   const removeFromCart = (roomId) => {
@@ -32,14 +60,19 @@ export const CartProvider = ({ children }) => {
       console.log('No item removed, check if the id matches any item in the cart');
     } else {
       console.log('Item removed successfully');
+      toast.success('Room removed from cart');
     }
   
     setCart(updatedCart);  
   };
-  
+
+  const clearCart = () => {
+    setCart([]);  
+    toast.success('Cart cleared');
+  };
   
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );

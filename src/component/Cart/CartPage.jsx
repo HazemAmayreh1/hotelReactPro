@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { CartContext } from "../../../context/cartContext";
 import styles from './CartPage.module.css';
 import axios from "axios";
+import Loader from '../Loader/Loader'; 
 
 function CartPage() {
   const { cart, removeFromCart } = useContext(CartContext);
@@ -14,11 +15,11 @@ function CartPage() {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/RoomAPI/GetRooms`);
         setRooms(response.data);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching rooms:", error);
-        setLoading(false);
         toast.error("Failed to load room data");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -27,16 +28,11 @@ function CartPage() {
 
   const handleRemove = (roomId) => {
     removeFromCart(roomId);
-    toast.info("Removed from Cart", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      theme: "light",
-    });
   };
+
+  if (loading) {
+    return <Loader />; 
+  }
 
   return (
     <div className="container mx-auto p-8">
@@ -69,7 +65,7 @@ function CartPage() {
                   <td className="py-2 px-4 border-b">
                     <button
                       onClick={() => handleRemove(room.roomId)} 
-                      className={`${styles.smallButton} bg-red-500 text-white rounded-lg hover:bg-red-600 transition`}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition ease-in-out"
                     >
                       Remove
                     </button>

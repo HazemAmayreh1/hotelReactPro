@@ -1,75 +1,127 @@
-import { useState,useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import styles from './Navbar.module.css';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styles from "./Navbar.module.css"; 
 import profile from "../../img/pngProfile.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faShoppingCart, faSignOutAlt, faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false); 
   const [username, setUsername] = useState(null); 
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(!isOpen); 
   };
 
   const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
+    setDropdownOpen(!dropdownOpen); 
   };
+
   useEffect(() => {
     const token = localStorage.getItem("guestEmail");
     if (token) {
-      setIsLoggedIn(true);  
+      setIsLoggedIn(true);
     }
   }, []);
+
   useEffect(() => {
-    const storedNameUserName = localStorage.getItem("username");
-    if (storedNameUserName) {
-      setUsername(storedNameUserName);  
+    const storedUsername = localStorage.getItem("username");
+    if (storedUsername) {
+      setUsername(storedUsername);
     }
   }, []);
+
   const handleLogout = () => {
-    localStorage.removeItem('guestEmail');
-    localStorage.removeItem('username');    
+    localStorage.removeItem("guestEmail");
+    localStorage.removeItem("username");
     setIsLoggedIn(false);
-    setUsername(null);   
+    setUsername(null);
+    navigate("/login");
   };
 
   return (
     <nav className={styles.navbar}>
       <div className={styles.navContainer}>
-        <h1 className={styles.logo}>Hotel Lunar</h1>
-        
-        <div className={`${styles.linkContainer} ${isOpen ? styles.active : ''}`}>
-          <Link to="/" className={styles.link}>Home</Link>
-          <Link to="/room" className={styles.link}>Rooms & Suites</Link>
-          <Link to="/facilities" className={styles.link}>Facilities</Link>
-          <Link to="/contacts" className={styles.link}>Contacts</Link>
+        <Link to="/" className={styles.logo}>
+          Hotel Lunar
+        </Link>
+
+        <div className={`${styles.linkContainer} ${isOpen ? styles.active : ""}`}>
+          <Link to="/" className={styles.link}>
+            Home
+          </Link>
+          <Link to="/room" className={styles.link}>
+            Rooms & Suites
+          </Link>
+          <Link to="/facilities" className={styles.link}>
+            Facilities
+          </Link>
+          <Link to="/contacts" className={styles.link}>
+            Contacts
+          </Link>
         </div>
+
         <div className={styles.dropdown}>
-        <button className="rounded-full overflow-hidden border-2 border-white focus:outline-none focus:border-gray-700" onClick={toggleDropdown}>
-       {!isLoggedIn ? <img src={profile} alt="Profile" className="h-8 w-8 rounded-full object-cover"/>:<h6 className={styles.link}>{username}</h6>} 
-        </button>
-        {dropdownOpen && (
-        <div className={styles.dropdownContent}>
-          
-          {!isLoggedIn ? ( 
-            <>
-              <Link to="/login" className={styles.dropdownItem}>Login</Link>
-              <Link to="/reg" className={styles.dropdownItem}>Register</Link>
-            </>
-          ) : (
-            <>
-              <Link to="/Cart" className={styles.dropdownItem}>Carts</Link>
-              <Link to="/order" className={styles.dropdownItem}>Orders</Link>
-              <button onClick={handleLogout} className={styles.logoutbtn}>Logout</button>
-            </>
+          <button
+            className={styles.dropBtn}
+            onClick={toggleDropdown}
+          >
+            <div className="flex items-center">
+              {!isLoggedIn ? (
+                <img
+                  src={profile}
+                  alt="Profile"
+                  className="h-10 w-10 rounded-full object-cover shadow-md transition-transform duration-300 hover:scale-105"
+                />
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <span className="text-gray-700 font-medium text-sm">Welcome,</span>
+                  <h6 className="text-gray-900 font-bold text-base hover:text-gray-600 transition-colors duration-300">
+                    {username}
+                  </h6>
+                  <FontAwesomeIcon icon={faUser} className="ml-2 text-gray-600" /> {/* Profile icon */}
+                </div>
+              )}
+            </div>
+          </button>
+
+          {dropdownOpen && (
+            <div className={styles.dropdownContent}>
+              {!isLoggedIn ? (
+                <>
+                  <Link to="/login" className={styles.dropdownItem}>
+                    <FontAwesomeIcon icon={faUser} className="mr-2" /> Login
+                  </Link>
+                  <Link to="/reg" className={styles.dropdownItem}>
+                    <FontAwesomeIcon icon={faUser} className="mr-2" /> Register
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/cart" className={styles.dropdownItem}>
+                    <FontAwesomeIcon icon={faShoppingCart} className="mr-2" /> Cart
+                  </Link>
+                  <Link to="/order" className={styles.dropdownItem}>
+                    <FontAwesomeIcon icon={faShoppingCart} className="mr-2" /> Orders
+                  </Link>
+                  <button onClick={handleLogout} className={styles.logoutbtn}>
+                    <FontAwesomeIcon icon={faSignOutAlt} className="mr-2" /> Logout
+                  </button>
+                </>
+              )}
+            </div>
           )}
         </div>
-      )}
-          </div>
+
         <button className={styles.hamburger} onClick={toggleMenu}>
-          &#9776;
+          {isOpen ? (
+            <FontAwesomeIcon icon={faTimes} />
+          ) : (
+            <FontAwesomeIcon icon={faBars} />
+          )}
         </button>
       </div>
     </nav>

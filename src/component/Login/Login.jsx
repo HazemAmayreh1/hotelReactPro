@@ -1,69 +1,74 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
-
+import Loader from "../Loader/Loader"; 
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState(""); 
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
-  
-
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+    setLoading(true);
+
     const encodedEmail = encodeURIComponent(email);
     const encodedPassword = encodeURIComponent(password);
-  
+
     const apiUrl = `${import.meta.env.VITE_API_URL}/GuestAPI/login/${encodedEmail}/${encodedPassword}`;
     try {
       const response = await axios.get(apiUrl);
-  
+
       if (response.status === 200) {
-        console.log("API call successful. Status 200 OK.");  
+        console.log("API call successful. Status 200 OK.");
         const responseData = response.data;
         console.log("Response data:", responseData);
-  
+
         if (responseData.guestEmail) {
-          localStorage.setItem("guestEmail", responseData.guestEmail); 
+          localStorage.setItem("guestEmail", responseData.guestEmail);
           localStorage.setItem("token", responseData.token);
-          localStorage.setItem('username', responseData.guestUserName);
+          localStorage.setItem("username", responseData.guestUserName);
+          localStorage.setItem("guestId", responseData.guestId);
+
           setUserName(responseData.guestUserName);
-          toast.success(`Login successful! Welcome, ${responseData.guestEmail}`);
+         
           setTimeout(() => {
+            setLoading(false); 
             navigate("/");
             window.location.reload();
-          }, 1500); 
+          }, 1000);
          
         } else {
+          setLoading(false);
           toast.error("Login failed: Invalid credentials.");
         }
       } else {
-        console.log(`Login failed with status: ${response.statusText}`); 
+        setLoading(false); 
         toast.error(`Login failed: ${response.statusText}`);
       }
     } catch (error) {
-      console.error("Network Error:", error); 
+      setLoading(false); 
+      console.error("Network Error:", error);
       toast.error(`Network Error: ${error.message}`);
     }
   };
 
   useEffect(() => {
     const storedToken = localStorage.getItem("guestEmail");
-    console.log(" founsdadsdad"); 
     if (storedToken) {
-      console.log("Token found:", storedToken); 
+      console.log("Token found:", storedToken);
     }
   }, [userName]);
 
-  
   return (
     <section className="relative bg-gray-50 dark:bg-gray-900 overflow-hidden">
       <ToastContainer />
+      {loading && <Loader />} 
+      
       <div className="absolute inset-0" style={{ height: "100%" }}>
         <img
           src="https://wallpaperaccess.com/full/2690784.jpg"

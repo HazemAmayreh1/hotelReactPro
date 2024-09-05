@@ -5,12 +5,27 @@
   padding-left: 50px;
 }
 .container h2 {
-  color: #4f4f4f;
-  font-size: 25px;
-  font-family: "Roboto";
-  font-weight: 600;
   text-align: center;
-  padding: 40px;
+  background-color: rgba(0, 0, 0, 0.4); 
+  color: #fff;
+  padding: 15px 30px;
+  font-size: 28px;
+  font-weight: 700; 
+  border-radius: 10px; 
+  text-transform: uppercase; 
+  letter-spacing: 1px; 
+  width: max-content;
+  margin: 0 auto; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); 
+  animation: fadeIn 1.5s ease-in-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .swiperSlide img {
