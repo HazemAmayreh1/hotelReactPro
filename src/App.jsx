@@ -15,6 +15,7 @@ import ProfileOrdersPage from "./component/ProfileOrdersPage/ProfileOrdersPage";
 import ProtectedRoutes from "./component/ProtectedRoutes/ProtectedRoutes";
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import AboutUs from "./component/AboutUs/AboutUs";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <Login />
+      },
+      {
+        path: "aboutus",
+        element: <AboutUs />
       },
       {
         path: "*",

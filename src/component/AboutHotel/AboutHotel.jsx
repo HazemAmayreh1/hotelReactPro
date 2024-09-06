@@ -1,5 +1,6 @@
 import styles from "./AboutHotel.module.css";
 import HotelImage from "../../img/swaming.jpg";
+import { Link } from "react-router-dom";
 
 function AboutHotel() {
   return (
@@ -24,7 +25,9 @@ function AboutHotel() {
               wake-up call and a message to be our messenger that people are the
               ones who can change what they want to change.
             </p>
-            <button>Read More</button>
+            <button><Link to="/aboutus" >About Us</Link></button>
+            
+             
           </div>
           <div className={styles.hotelImage}>
             <img src={HotelImage} alt="Standard Single Room" />

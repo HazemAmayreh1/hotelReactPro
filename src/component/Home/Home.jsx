@@ -8,11 +8,12 @@ import Swiper from "../Swiper/Swiper";
 import RoomImageSlider from "../SliderHome/SliderHome";
 import Loader from "../Loader/Loader"; 
 import styles from './Home.module.css';
+import { Link ,  useNavigate} from "react-router-dom";
 
 function Home() {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchRooms = async () => {
       try {
@@ -29,7 +30,7 @@ function Home() {
   }, []);
 
   const handleReserveClick = () => {
-    console.log("Reserve button clicked!");
+    navigate("/room");
   };
 
   if (loading) {
@@ -51,7 +52,7 @@ function Home() {
       <Banner imageUrl={backgroundSw} title="Event & Weddings" />
       
       <div className="px-10 py-24">
-        <h2 className={styles.slidertitle}>Our Rooms</h2>
+        <h2 className={styles.slidertitle}><Link to="/room" >Our Rooms</Link></h2>
         {rooms.length > 0 ? (
           <RoomImageSlider images={rooms.map((room) => room.roomImage)} /> 
         ) : (

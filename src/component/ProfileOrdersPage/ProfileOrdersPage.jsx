@@ -1,108 +1,192 @@
-import { useContext } from 'react';
-import { CartContext } from '../../../context/cartContext'; 
-const ProfileOrdersPage = () => {
-  const { cart, updateOrder } = useContext(CartContext);
-  const handleInputChange = (event, index) => {
-    const { name, value } = event.target;
-    const updatedCart = [...cart];
-    updatedCart[index] = {
-      ...updatedCart[index],
-      [name]: value
-    };
-    updateOrder(updatedCart); 
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { CartContext } from "../../../context/cartContext"; 
+import Loader from "../Loader/Loader"; 
+
+function OrderPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { cart, clearCart } = useContext(CartContext); 
+  const [checkInDate, setCheckInDate] = useState('');
+  const [checkOutDate, setCheckOutDate] = useState('');
+  const [guestId, setGuestId] = useState(null);
+  const [reservations, setReservations] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const storedGuestId = localStorage.getItem('guestId');
+    if (!storedGuestId) {
+      toast.error("Guest ID not found. Please log in.");
+      navigate("/login"); 
+    } else {
+      setGuestId(storedGuestId);
+      fetchReservations(storedGuestId); 
+    }
+  }, [navigate]);
+
+  const fetchReservations = async (guestId) => {
+    setLoading(true); 
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/Reservation/getReservations/${guestId}`);
+      setReservations(response.data); 
+    } catch (error) {
+     console.log("Error fetching reservations.");
+    } finally {
+      setLoading(false); 
+    }
   };
 
-  return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="md:col-span-1">
-          <div className="px-4 sm:px-0">
-            <h3 className="text-lg font-medium leading-6 text-gray-900">Profile</h3>
-            <p className="mt-1 text-sm text-gray-600">
-              Update your profile information.
-            </p>
-          </div>
-          <div className="mt-5 md:mt-0 md:col-span-2">
-            <form action="#" method="POST">
-              <div className="shadow sm:rounded-md sm:overflow-hidden">
-                <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
-                  <div>
-                    <label htmlFor="user_name" className="block text-sm font-medium text-gray-700">
-                      Full name
-                    </label>
-                    <input
-                      type="text"
-                      name="user_name"
-                      id="user_name"
-                      autoComplete="name"
-                      className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    />
-                  </div>
+  const handleOrderSubmit = async (event) => {
+    event.preventDefault();
 
-                  <div>
-                    <label htmlFor="email_address" className="block text-sm font-medium text-gray-700">
-                      Email address
-                    </label>
-                    <input
-                      type="text"
-                      name="email_address"
-                      id="email_address"
-                      autoComplete="email"
-                      className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                    />
-                  </div>
-                </div>
-                <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                  <button
-                    type="submit"
-                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
-            </form>
+    if (!guestId) {
+      toast.error("Guest ID not found. Please log in.");
+      return;
+    }
+
+    const encodedStartDate = encodeURIComponent(checkInDate);
+    const encodedEndDate = encodeURIComponent(checkOutDate);
+
+    try {
+      setLoading(true); 
+      for (const room of cart) {
+        const roomId = room.roomId;
+        if (!roomId) {
+          toast.error("Room ID is missing for one or more rooms.");
+          return;
+        }
+
+        const encodedRoomId = encodeURIComponent(roomId);
+        const amount = room.price;
+
+        const apiUrl = `${import.meta.env.VITE_API_URL}/Reservation/createReservation/${encodedStartDate}/${encodedEndDate}/${amount}/${guestId}/${encodedRoomId}`;
+
+        const response = await axios.get(apiUrl);
+
+        if (response.status === 200) {
+          toast.success("Reservation created successfully for room " + room.roomName);
+        } else {
+          toast.error(`Failed to create reservation: ${response.statusText}`);
+        }
+      }
+
+      clearCart(); 
+      fetchReservations(guestId);
+    } catch (error) {
+      console.error("Error creating reservation:", error);
+      toast.error(`Error creating reservation: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancelReservation = async (reservationId) => {
+    setLoading(true); 
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/Reservation/cancelReservation/${reservationId}`);
+      if (response.status === 200) {
+        toast.success("Reservation canceled successfully.");
+        fetchReservations(guestId); 
+        setTimeout(() => {
+          window.location.reload(); 
+        }, 1000); 
+      } else {
+        toast.error(`Failed to cancel reservation: ${response.statusText}`);
+      }
+    } catch (error) {
+      toast.error("Error canceling reservation.");
+    } finally {
+      setLoading(false); 
+    }
+  };
+
+  if (loading) {
+    return <Loader />; 
+  }
+
+  return (
+    <div className="container mx-auto p-8">
+      <h1 className="text-3xl font-bold mb-6">Finalize Your Order</h1>
+      {cart && cart.length > 0 ? (
+        <form onSubmit={handleOrderSubmit}>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Check-In Date:
+            </label>
+            <input
+              type="date"
+              className="w-full px-3 py-2 border rounded-lg"
+              value={checkInDate}
+              onChange={(e) => setCheckInDate(e.target.value)}
+              required
+            />
           </div>
-        </div>
-        <div className="md:col-span-2">
-          <div className="px-4 sm:px-0">
-            <h3 className="text-lg font-medium leading-6 text-gray-900">Your Orders</h3>
-            <ul className="mt-5 grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {cart.map((item, index) => (
-                <li key={index} className="col-span-1 flex shadow-sm rounded-md">
-                  <div className="flex-shrink-0 flex items-center justify-center w-16 bg-gray-500 text-white text-sm font-medium rounded-l-md">
-                    {index + 1}
-                  </div>
-                  <div className="flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate">
-                    <div className="flex-1 px-4 py-2 text-sm truncate">
-                      <a href="#" className="text-gray-900 font-medium hover:text-gray-600">
-                        {item.name}
-                      </a>
-                      <p className="text-gray-500">${item.price_per_night}</p>
-                      <input
-                      type="date"
-                      name="due_date"
-                      value={item.due_date || ''}
-                      onChange={(event) => handleInputChange(event, index)}
-                      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm sm:text-sm"
-                    />
-                    <input
-                      type="date"
-                      name="expiry_date"
-                      value={item.expiry_date || ''}
-                      onChange={(event) => handleInputChange(event, index)}
-                      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm sm:text-sm"
-                    />
-                    </div>
-                  </div>
-                </li>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">
+              Check-Out Date:
+            </label>
+            <input
+              type="date"
+              className="w-full px-3 py-2 border rounded-lg"
+              value={checkOutDate}
+              onChange={(e) => setCheckOutDate(e.target.value)}
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition ease-in-out"
+          >
+            Confirm Order
+          </button>
+        </form>
+      ) : (
+        <p>Your cart is empty.</p>
+      )}
+
+      <h2 className="text-2xl font-bold mt-10">Your Reservations</h2>
+      {reservations.length > 0 ? (
+        <div className="mt-4">
+          <table className="min-w-full bg-white border border-gray-300 text-left border-collapse">
+            <thead>
+              <tr>
+                <th className="py-2 px-4 border-b">Room Name</th>
+                <th className="py-2 px-4 border-b">Amount</th>
+                <th className="py-2 px-4 border-b">Start Date</th>
+                <th className="py-2 px-4 border-b">End Date</th>
+                <th className="py-2 px-4 border-b">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {reservations.map((reservation) => (
+                <tr key={reservation.reservationId}>
+                  <td className="py-2 px-4 border-b">{reservation.roomId}</td>
+                  <td className="py-2 px-4 border-b">${reservation.totalAmount}</td>
+                  <td className="py-2 px-4 border-b">{reservation.startDate}</td>
+                  <td className="py-2 px-4 border-b">{reservation.endDate}</td>
+                  <td className="py-2 px-4 border-b">
+                    <button
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition ease-in-out"
+                      onClick={() => handleCancelReservation(reservation.reservationId)}
+                    >
+                      Cancel
+                    </button>
+                  </td>
+                </tr>
               ))}
-            </ul>
-          </div>
+            </tbody>
+          </table>
         </div>
-      </div>
+      ) : (
+        <p>No reservations found.</p>
+      )}
     </div>
   );
-};
+}
 
-export default ProfileOrdersPage;
+export default OrderPage;
