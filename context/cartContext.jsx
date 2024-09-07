@@ -77,13 +77,10 @@ export const CartProvider = ({ children }) => {
     setCart(updatedCart);  
   };
 
-  // Clear all items from the cart
   const clearCart = () => {
     setCart([]);
-    toast.success('Cart cleared');
   };
 
-  // Provide the cart, addToCart, removeFromCart, and clearCart functions as context values
   return (
     <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart }}>
       {children}

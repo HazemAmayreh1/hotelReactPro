@@ -5,7 +5,7 @@ import backgroundImage from "../../img/contactBanner.jpg";
 import phoneIcon from "../../img/phoneIconGray.png";
 import emailIcon from "../../img/email-iconGray.png";
 import locationIcon from "../../img/location-iconGray.png";
-import Loader from "../Loader/Loader";  // Import the Loader component
+import Loader from "../Loader/Loader";  
 import styles from './Contacts.module.css';
 import { toast, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,7 +14,7 @@ function Contacts() {
   const [formData, setFormData] = useState({
     comment: '' 
   });
-  const [loading, setLoading] = useState(false); // Add loading state
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,12 +26,12 @@ function Contacts() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setLoading(true);  // Start loader
+    setLoading(true);  
 
     const GuestId = localStorage.getItem('guestId'); 
 
     if (!GuestId) {
-      setLoading(false); // Stop loader if GuestId is missing
+      setLoading(false);
       toast.error('Guest ID not found. Please log in.');
       return;
     }
@@ -63,13 +63,13 @@ function Contacts() {
       console.error("Network Error:", error);
       toast.error(`Network Error: ${error.message}`);
     } finally {
-      setLoading(false);  // Stop loader after the request completes
+      setLoading(false);  
     }
   };
 
   return (
     <>
-      {loading && <Loader />} {/* Display loader when loading is true */}
+      {loading && <Loader />} 
       <Banner imageUrl={backgroundImage} title="Contact Us" />
       <div className={styles.container}>
         <h2 className={styles.header}>We’d love to hear your feedback. Kindly send us a message.</h2>

@@ -18,7 +18,8 @@ function Room() {
     const fetchRooms = async () => {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/RoomAPI/GetRooms`);
-        setRooms(response.data); 
+        const availableRooms = response.data.filter(room => !room.status); 
+        setRooms(availableRooms); 
         setLoading(false); 
       } catch (error) {
         console.error("Error fetching rooms:", error);
@@ -34,48 +35,24 @@ function Room() {
     const guestEmail = localStorage.getItem("guestEmail");  
     return guestEmail;
   };
-const handleBookNow = async (room) => {
-  if (isAuthenticated()) {
-    setLoading(true);  
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); 
-      
-      addToCart(room);
-      
-      const encodedRoomName = encodeURIComponent(room.roomName);
-      const encodedRoomNumber = encodeURIComponent(room.roomNumber);
-      const encodedRoomType = encodeURIComponent(room.type);
-      const encodedRoomImage = encodeURIComponent(room.roomImage);
-      const encodedPrice = encodeURIComponent(room.price);
 
-      const updateRoomStatusUrl = `${import.meta.env.VITE_API_URL}/RoomAPI/UpdateRoom/${encodedRoomName}/${encodedRoomNumber}/${encodedRoomType}/${encodedPrice}/true/${encodedRoomImage}`;
-      
-      console.log('Sending request to update room status:', updateRoomStatusUrl);
-
-      const response = await axios.get(updateRoomStatusUrl);
-      
-      if (response.status === 200) {
-        console.log("Room status updated successfully.");
-        toast.success("Room booked and status updated successfully.");
-      } else {
-        console.log("Failed to update room status. Response:", response.data);
-        toast.error("Failed to update room status.");
+  const handleBookNow = async (room) => {
+    if (isAuthenticated()) {
+      setLoading(true);  
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); 
+        addToCart(room);  
+      } catch (error) {
+        console.error("Error booking room:", error);
+        toast.error("Failed to book the room.");
+      } finally {
+        setLoading(false); 
       }
-
-    } catch (error) {
-      console.error("Error booking room and updating status:", error);
-      toast.error("Failed to book the room and update status.");
-    } finally {
-      setLoading(false); 
+    } else {
+      toast.error("You need to be logged in to book a room.");
+      navigate("/reg");
     }
-  } else {
-    toast.error("You need to be logged in to book a room.");
-    navigate("/reg");
-  }
-};
-
-  
-
+  };
 
   if (loading) {
     return <Loader />;

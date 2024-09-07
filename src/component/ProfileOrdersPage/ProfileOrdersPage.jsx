@@ -30,9 +30,17 @@ function OrderPage() {
     setLoading(true); 
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/Reservation/getReservations/${guestId}`);
-      setReservations(response.data); 
+      setReservations(response.data);
+
+      response.data.forEach((reservation) => {
+        const currentDate = new Date();
+        const reservationEndDate = new Date(reservation.endDate);
+        if (reservationEndDate < currentDate) {
+          handleCancelReservation(reservation.reservationId);
+        }
+      });
     } catch (error) {
-     console.log("Error fetching reservations.");
+      console.log("Error fetching reservations.");
     } finally {
       setLoading(false); 
     }
