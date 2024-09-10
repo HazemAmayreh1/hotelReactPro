@@ -1,8 +1,39 @@
-# React + Vite
+## 1. **Title:**
+   **Hotel Lunar**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 2. **Project Description:**
+   This project is designed for remote room booking at Hotel Lunar. It allows users to create an account to manage their reservations easily.
 
-Currently, two official plugins are available:
+## 3. **Features:**
+   The key features of the project include:
+   - Account creation and user authentication.
+   - Browsing available rooms and amenities.
+   - Room booking and payment processing.
+   - Reservation management.
+   - User dashboard for managing rbookings.
+   - Communication with the hotel through message sending.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 4. **Technologies Used:**
+   - **React:** For managing the user interface.
+   - **Vite:** For faster performance and easier development.
+   - **Tailwind CSS:** For efficient and rapid UI design.
+
+## 5. Installation & Running of the Project:
+Follow these steps to set up and run the project locally:
+
+Clone the repository
+```
+  git clone https://github.com/HazemAmayreh1/hotelReactPro.git
+```
+Navigate to the project directory
+```
+cd project-name
+```
+Install dependencies
+```
+npm install
+```
+Run the project
+```
+npm run dev
+```
