@@ -52,8 +52,8 @@ function Login() {
       }
     } catch (error) {
       setLoading(false); 
-      console.error("Network Error:", error);
-      toast.error(`Network Error: ${error.message}`);
+      console.error("Networks Error:", error);
+      toast.error(`Networks Error: ${error.message}`);
     }
   };
 
