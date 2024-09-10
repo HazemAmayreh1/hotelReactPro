@@ -8,7 +8,7 @@
    The key features of the project include:
    - Account creation and user authentication.
    - Browsing available rooms and amenities.
-   - Room booking and payment processing.
+   - Room booking.
    - Reservation management.
    - User dashboard for managing rbookings.
    - Communication with the hotel through message sending.
